@@ -29,9 +29,21 @@ public class UserService {
         User user = userRepository.findById(id).orElse(null);
         if (user == null) return null;
 
-        if (userUpdates.getUsername() != null) user.setUsername(userUpdates.getUsername());
-        if (userUpdates.getEmail() != null) user.setEmail(userUpdates.getEmail());
-        if (userUpdates.getPassword() != null) user.setPassword(userUpdates.getPassword());
+        if (userUpdates.getUsername() != null) {
+            if (userRepository.existsByUsername(userUpdates.getUsername()) && !user.getUsername().equals(userUpdates.getUsername())) {
+                throw new IllegalArgumentException("Username already exists");
+            }
+            user.setUsername(userUpdates.getUsername());
+        }
+        if (userUpdates.getEmail() != null) {
+            if(userRepository.existsByEmail(userUpdates.getEmail()) && !user.getEmail().equals(userUpdates.getEmail())) {
+                throw new IllegalArgumentException("Email already exists");
+            }
+            user.setEmail(userUpdates.getEmail());
+        }
+        if (userUpdates.getPassword() != null) {
+            user.setPassword(userUpdates.getPassword());
+        }
 
         return userRepository.save(user);
     }
