@@ -3,7 +3,7 @@ package com.fnatlas.api.services;
 import com.fnatlas.api.entities.Collection;
 import com.fnatlas.api.entities.CollectionMap;
 import com.fnatlas.api.entities.User;
-import com.fnatlas.api.exceptions.CollectionNotFoundException;
+import com.fnatlas.api.exceptions.EntityNotFoundException;
 import com.fnatlas.api.repositories.CollectionMapRepository;
 import com.fnatlas.api.repositories.CollectionsRepository;
 import jakarta.transaction.Transactional;
@@ -33,7 +33,7 @@ public class CollectionsService {
 
     public Collection getCollectionById(Long id) {
         return collectionsRepository.findById(id)
-                .orElseThrow(() -> new CollectionNotFoundException(id));
+                .orElseThrow(() -> new EntityNotFoundException("Collection", id));
     }
 
     public Collection updateCollection(Long id, Collection collectionUpdates) {
@@ -46,7 +46,7 @@ public class CollectionsService {
     }
 
     public void deleteCollection(Long id) {
-        if (!collectionsRepository.existsById(id)) throw new CollectionNotFoundException(id);
+        if (!collectionsRepository.existsById(id)) throw new EntityNotFoundException("Collection", id);
         collectionsRepository.deleteById(id);
     }
 
@@ -66,7 +66,7 @@ public class CollectionsService {
     @Transactional
     public void removeMapFromCollection(Long id, String mapCode) {
         if (!collectionsRepository.existsById(id))
-            throw new CollectionNotFoundException(id);
+            throw new EntityNotFoundException("Collection", id);
         if (!collectionMapRepository.existsByCollectionIdAndMapCode(id, mapCode))
             throw new IllegalArgumentException("Map not found in the collection");
 

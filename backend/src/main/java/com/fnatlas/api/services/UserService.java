@@ -1,7 +1,7 @@
 package com.fnatlas.api.services;
 
 import com.fnatlas.api.entities.User;
-import com.fnatlas.api.exceptions.UserNotFoundException;
+import com.fnatlas.api.exceptions.EntityNotFoundException;
 import com.fnatlas.api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User", id));
     }
 
     public List<User> getAllUsers() {
@@ -27,7 +27,7 @@ public class UserService {
     }
 
     public User updateUser(Long id, User userUpdates) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User", id));
 
         if (userUpdates.getUsername() != null) user.setUsername(userUpdates.getUsername());
         if (userUpdates.getEmail() != null) user.setEmail(userUpdates.getEmail());
@@ -37,7 +37,7 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        if(!userRepository.existsById(id)) throw new UserNotFoundException(id);
+        if(!userRepository.existsById(id)) throw new EntityNotFoundException("User", id);
         userRepository.deleteById(id);
     }
 }

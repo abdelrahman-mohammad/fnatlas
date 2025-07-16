@@ -1,9 +1,8 @@
 package com.fnatlas.api.controllers;
 
 import com.fnatlas.api.exceptions.AuthenticationFailedException;
-import com.fnatlas.api.exceptions.CollectionNotFoundException;
+import com.fnatlas.api.exceptions.EntityNotFoundException;
 import com.fnatlas.api.exceptions.ErrorResponse;
-import com.fnatlas.api.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,9 +11,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleUserNotFound(UserNotFoundException ex) {
+    public ErrorResponse handleEntityNotFound(EntityNotFoundException ex) {
         return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
@@ -22,12 +21,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse handleAuthFailed(AuthenticationFailedException ex) {
         return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
-    }
-
-    @ExceptionHandler(CollectionNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleCollectionNotFound(CollectionNotFoundException ex) {
-        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

@@ -4,7 +4,7 @@ import com.fnatlas.api.dtos.LoginResponse;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.entities.UserSession;
 import com.fnatlas.api.exceptions.AuthenticationFailedException;
-import com.fnatlas.api.exceptions.UserNotFoundException;
+import com.fnatlas.api.exceptions.EntityNotFoundException;
 import com.fnatlas.api.repositories.UserRepository;
 import com.fnatlas.api.repositories.UserSessionsRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class AuthService {
 
     public LoginResponse login(String username, String password) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("username", username));
+                .orElseThrow(() -> new EntityNotFoundException("User", "username", username));
 
         if (!user.getPassword().equals(password)) throw new AuthenticationFailedException();
 
@@ -52,7 +52,7 @@ public class AuthService {
         }
 
         return userRepository.findById(userSession.getUser().getId())
-                .orElseThrow(() -> new UserNotFoundException(userSession.getUser().getId()));
+                .orElseThrow(() -> new EntityNotFoundException("User", userSession.getUser().getId()));
     }
 
 }
