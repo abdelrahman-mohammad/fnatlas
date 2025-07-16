@@ -1,6 +1,7 @@
 package com.fnatlas.api.services;
 
 import com.fnatlas.api.entities.User;
+import com.fnatlas.api.exceptions.UserNotFoundException;
 import com.fnatlas.api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,15 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElse(null);
+        return userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("username", username));
     }
 
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("email", email));
     }
 
     public List<User> getAllUsers() {
@@ -34,8 +35,7 @@ public class UserService {
     }
 
     public User updateUser(Long id, User userUpdates) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user == null) throw new IllegalArgumentException("User not found with id: " + id);
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
         if (userUpdates.getUsername() != null) user.setUsername(userUpdates.getUsername());
         if (userUpdates.getEmail() != null) user.setEmail(userUpdates.getEmail());
