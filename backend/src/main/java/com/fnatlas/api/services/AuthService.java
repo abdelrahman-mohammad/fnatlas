@@ -19,7 +19,7 @@ public class AuthService {
     private final UserSessionsRepository userSessionsRepository;
     private final UserRepository userRepository;
 
-    public UserSession createAuthToken(User user) {
+    public UserSession createUserSession(User user) {
         UserSession userSession = new UserSession(user);
         return userSessionsRepository.save(userSession);
     }
@@ -30,7 +30,7 @@ public class AuthService {
 
         if (!user.getPassword().equals(password)) throw new AuthenticationFailedException();
 
-        UserSession userSession = createAuthToken(user);
+        UserSession userSession = createUserSession(user);
         return new LoginResponse(userSession.getToken(), user);
     }
 
