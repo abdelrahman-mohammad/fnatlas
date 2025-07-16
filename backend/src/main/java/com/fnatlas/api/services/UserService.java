@@ -22,14 +22,6 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("username", username));
-    }
-
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("email", email));
-    }
-
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -44,11 +36,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public boolean deleteUser(Long id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteUser(Long id) {
+        if(!userRepository.existsById(id)) throw new UserNotFoundException(id);
+        userRepository.deleteById(id);
     }
 }

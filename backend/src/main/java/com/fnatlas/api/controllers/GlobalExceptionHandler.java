@@ -28,4 +28,10 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleBadRequest(IllegalArgumentException ex) {
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     }
+
+    @ExceptionHandler(NullPointerException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleNullPointer(NullPointerException ex) {
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred: " + ex.getMessage());
+    }
 }
