@@ -1,6 +1,7 @@
 package com.fnatlas.api.controllers;
 
 import com.fnatlas.api.exceptions.AuthenticationFailedException;
+import com.fnatlas.api.exceptions.CollectionNotFoundException;
 import com.fnatlas.api.exceptions.ErrorResponse;
 import com.fnatlas.api.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -23,15 +24,21 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
     }
 
+    @ExceptionHandler(CollectionNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleCollectionNotFound(CollectionNotFoundException ex) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequest(IllegalArgumentException ex) {
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     }
 
-    @ExceptionHandler(NullPointerException.class)
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleNullPointer(NullPointerException ex) {
+    public ErrorResponse handleGeneralException(Exception ex) {
         return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred: " + ex.getMessage());
     }
 }
