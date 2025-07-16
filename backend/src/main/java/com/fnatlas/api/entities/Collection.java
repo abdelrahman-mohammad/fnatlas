@@ -7,35 +7,36 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
-@Table(name = "user_sessions")
+@Table(name = "collections")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserSession {
+public class Collection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "description")
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "token", unique = true, nullable = false)
-    private String token;
-
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "expires_at", nullable = false)
-    private LocalDateTime expiresAt = LocalDateTime.now().plusDays(1);
-
-    public UserSession(User user) {
+    public Collection(String name, String description, User user) {
+        this.name = name;
+        this.description = description;
         this.user = user;
-        this.token = UUID.randomUUID().toString();
     }
 }
