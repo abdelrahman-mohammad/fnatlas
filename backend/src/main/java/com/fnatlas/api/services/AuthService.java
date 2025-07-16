@@ -54,5 +54,4 @@ public class AuthService {
                 .orElseThrow(() -> new UserNotFoundException(userSession.getUser().getId()));
     }
 
-
 }
