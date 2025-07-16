@@ -71,4 +71,4 @@ This project is for educational purposes.
 
 ## 🔗 Resources
 
-- [Epic Games API Documentation](https://dev.epicgames.com/)
+- [Epic Games API Documentation](https://api.fortnite.com/ecosystem/v1/docs/)
