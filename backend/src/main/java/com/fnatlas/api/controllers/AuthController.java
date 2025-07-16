@@ -2,6 +2,7 @@ package com.fnatlas.api.controllers;
 
 import com.fnatlas.api.dtos.LoginRequest;
 import com.fnatlas.api.dtos.LoginResponse;
+import com.fnatlas.api.dtos.LogoutRequest;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.services.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ public class AuthController {
 
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(@RequestBody String token) { // Could create a DTO for LogoutRequest, but it would just have a single field for token (so not necessary?)
-        authService.logout(token);
+    public void logout(@RequestBody LogoutRequest token) {
+        authService.logout(token.getToken());
     }
 
     @GetMapping("/me")

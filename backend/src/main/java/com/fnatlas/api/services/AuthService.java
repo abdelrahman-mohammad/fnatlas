@@ -35,6 +35,7 @@ public class AuthService {
     }
 
     public void logout(String token) {
+        System.out.println("Logging out user with token: " + token);
         UserSession userSession = userSessionsRepository.findByToken(token)
                 .orElseThrow(() -> new AuthenticationFailedException("Invalid token"));
 
