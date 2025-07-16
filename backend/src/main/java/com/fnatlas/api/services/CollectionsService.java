@@ -1,9 +1,12 @@
 package com.fnatlas.api.services;
 
 import com.fnatlas.api.entities.Collection;
+import com.fnatlas.api.entities.CollectionMap;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.exceptions.CollectionNotFoundException;
+import com.fnatlas.api.repositories.CollectionMapRepository;
 import com.fnatlas.api.repositories.CollectionsRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,7 @@ import java.util.List;
 public class CollectionsService {
 
     private final CollectionsRepository collectionsRepository;
+    private final CollectionMapRepository collectionMapRepository;
     private final UserService userService;
 
     public Collection createCollection(Collection collection, Long userId) {
@@ -46,15 +50,27 @@ public class CollectionsService {
         collectionsRepository.deleteById(id);
     }
 
-//    public Collection addMapToCollection(Long id, String mapCode) {
-//        Collection collection = getCollectionById(id);
-//        collection.getMaps().add(mapCode);
-//        return collectionsRepository.save(collection);
-//    }
-//
-//    public Collection removeMapFromCollection(Long id, String mapCode) {
-//        Collection collection = getCollectionById(id);
-//        collection.getMaps().remove(mapCode);
-//        return collectionsRepository.save(collection);
-//    }
+    public CollectionMap addMapToCollection(Long id, String mapCode) {
+        Collection collection = getCollectionById(id);
+
+        if(collectionMapRepository.existsByCollectionIdAndMapCode(id, mapCode))
+            throw new IllegalArgumentException("Map already exists in the collection");
+
+        return collectionMapRepository.save(new CollectionMap(mapCode, collection));
+    }
+
+    public List<CollectionMap> getMapsByCollectionId(Long collectionId) {
+        return collectionMapRepository.findByCollectionId(collectionId);
+    }
+
+    @Transactional
+    public void removeMapFromCollection(Long id, String mapCode) {
+        if (!collectionsRepository.existsById(id))
+            throw new CollectionNotFoundException(id);
+        if (!collectionMapRepository.existsByCollectionIdAndMapCode(id, mapCode))
+            throw new IllegalArgumentException("Map not found in the collection");
+
+        collectionMapRepository.deleteByCollectionIdAndMapCode(id, mapCode);
+    }
+
 }

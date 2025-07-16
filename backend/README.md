@@ -55,7 +55,8 @@ GET    /api/collections/{id}               - Get collection details
 PUT    /api/collections/{id}               - Update collection
 DELETE /api/collections/{id}               - Delete collection
 POST   /api/collections/{id}/maps          - Add map to collection
-DELETE /api/collections/{id}/maps/{mapCode} - Remove map from collection
+GET   /api/collections/{id}/maps           - Get maps in collection
+DELETE /api/collections/{id}/maps/{mapId} - Remove map from collection
 ```
 
 ### Review Endpoints

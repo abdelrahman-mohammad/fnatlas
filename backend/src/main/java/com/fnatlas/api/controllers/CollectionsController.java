@@ -1,6 +1,8 @@
 package com.fnatlas.api.controllers;
 
+import com.fnatlas.api.dtos.CollectionMapRequest;
 import com.fnatlas.api.entities.Collection;
+import com.fnatlas.api.entities.CollectionMap;
 import com.fnatlas.api.services.CollectionsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,17 +44,22 @@ public class CollectionsController {
         collectionsService.deleteCollection(id);
     }
 
-//    @PostMapping("/{id}/maps")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public Collection addMapToCollection(@PathVariable Long id, @RequestParam String mapCode) {
-//        return collectionsService.addMapToCollection(id, mapCode);
-//    }
-//
-//    @DeleteMapping("/{id}/maps/{mapCode}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public Collection removeMapFromCollection(@PathVariable Long id, @PathVariable String mapCode) {
-//        return collectionsService.removeMapFromCollection(id, mapCode);
-//    }
+    @PostMapping("/{id}/maps")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CollectionMap addMapToCollection(@PathVariable Long id, @RequestBody CollectionMapRequest collectionMapRequest) {
+        return collectionsService.addMapToCollection(id, collectionMapRequest.getMapCode());
+    }
+
+    @GetMapping("/{id}/maps")
+    public List<CollectionMap> getMapsInCollection(@PathVariable Long id) {
+        return collectionsService.getMapsByCollectionId(id);
+    }
+
+    @DeleteMapping("/{id}/maps/{mapCode}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeMapFromCollection(@PathVariable Long id, @PathVariable String mapCode) {
+        collectionsService.removeMapFromCollection(id, mapCode);
+    }
 
 
 }
