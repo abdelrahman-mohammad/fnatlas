@@ -27,10 +27,6 @@ public class Review {
     @Pattern(regexp = "^[0-9]{4}-[0-9]{4}-[0-9]{4}$", message = "Map code must be in format XXXX-XXXX-XXXX")
     private String mapCode;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @Column(name = "rating", nullable = false)
     @NotNull(message = "Rating cannot be null")
     @Min(value = 1, message = "Rating must be at least 1")
@@ -40,6 +36,10 @@ public class Review {
     @Column(name = "content")
     @Size(min = 10, max = 1000, message = "Content must be between 10 and 1000 characters")
     private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

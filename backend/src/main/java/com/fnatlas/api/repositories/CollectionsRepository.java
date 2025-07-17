@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface CollectionsRepository extends JpaRepository<Collection, Long> {
-    List<Collection> getCollectionsByUserId(Long userId);
+    List<Collection> findCollectionsByUserId(Long userId);
     Optional<Collection> findCollectionByIdAndUserId(Long collectionId, Long userId);
-    boolean existsByIdAndUserId(Long collectionId, Long userId);
 }

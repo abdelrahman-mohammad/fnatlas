@@ -23,20 +23,8 @@ public class ReviewsService {
         if (reviewsRepository.existsByMapCodeAndUserId(reviewRequest.getMapCode(), userId))
             throw new IllegalArgumentException("User has already reviewed this map");
 
-
         Review review = new Review(reviewRequest.getMapCode(), user, reviewRequest.getRating(), reviewRequest.getContent());
-
         return reviewsRepository.save(review);
-    }
-
-    public Review getReviewById(Long id) {
-        return reviewsRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Review", id));
-    }
-
-    public List<Review> getReviewsByMapCode(String mapCode) {
-        // Validate that the mapCode is not null or empty - blank until map controller is implemented
-        return reviewsRepository.findReviewsByMapCode(mapCode);
     }
 
     public List<Review> getReviewsByUserId(Long userId) {
@@ -44,9 +32,14 @@ public class ReviewsService {
         return reviewsRepository.findReviewsByUserId(userId);
     }
 
-    public Review updateReview(Long id, ReviewRequest reviewUpdatesRequest) {
-        Review existingReview = reviewsRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Review", id));
+    public Review getReviewByIdAndUserId(Long reviewId, Long userId) {
+        userService.getUserById(userId);
+        return reviewsRepository.findReviewByIdAndUserId(reviewId, userId)
+                .orElseThrow(() -> new EntityNotFoundException("Review", reviewId));
+    }
+
+    public Review updateReview(Long reviewId, Long userId, ReviewRequest reviewUpdatesRequest) {
+        Review existingReview = getReviewByIdAndUserId(reviewId, userId);
 
         if (reviewUpdatesRequest.getRating() != 0) existingReview.setRating(reviewUpdatesRequest.getRating());
         if (reviewUpdatesRequest.getContent() != null) existingReview.setContent(reviewUpdatesRequest.getContent());
@@ -54,10 +47,23 @@ public class ReviewsService {
         return reviewsRepository.save(existingReview);
     }
 
-    public void deleteReview(Long id) {
-        if (!reviewsRepository.existsById(id))
-            throw new EntityNotFoundException("Review", id);
-
-        reviewsRepository.deleteById(id);
+    public void deleteReview(Long reviewId, Long userId) {
+        getReviewByIdAndUserId(reviewId, userId);
+        reviewsRepository.deleteById(reviewId);
     }
+
+    // Map-related methods
+
+    public List<Review> getReviewsByMapCode(String mapCode) {
+        return reviewsRepository.findReviewsByMapCode(mapCode);
+    }
+
+    public Review getReviewByIdAndMapCode(Long reviewId, String mapCode) {
+        // TODO: Validate mapCode - blank until map controller is implemented
+        return reviewsRepository.findReviewByIdAndMapCode(reviewId, mapCode)
+                .orElseThrow(() -> new EntityNotFoundException("Review", reviewId));
+    }
+
+
+
 }

@@ -35,7 +35,7 @@ public class CollectionsService {
 
     public List<Collection> getCollectionsByUserId(Long userId) {
         User user = userService.getUserById(userId);
-        return collectionsRepository.getCollectionsByUserId(user.getId());
+        return collectionsRepository.findCollectionsByUserId(user.getId());
     }
 
     public Collection getCollectionByIdAndUserId(Long collectionId, Long userId) {
@@ -54,38 +54,29 @@ public class CollectionsService {
     }
 
     public void deleteCollection(Long collectionId, Long userId) {
-        if (!collectionsRepository.existsById(collectionId))
-            throw new EntityNotFoundException("Collection", collectionId);
-        if (!collectionsRepository.existsByIdAndUserId(collectionId, userId))
-            throw new IllegalArgumentException("Collection does not belong to the user");
-
-        collectionsRepository.deleteById(collectionId);
+        Collection collection = getCollectionByIdAndUserId(collectionId, userId);
+        collectionsRepository.delete(collection);
     }
 
     public CollectionMap addMapToCollection(Long collectionId, Long userId, String mapCode) {
         Collection collection = getCollectionByIdAndUserId(collectionId, userId);
 
-        if(collectionMapRepository.existsByCollectionIdAndMapCode(collectionId, mapCode))
+        if(collectionMapRepository.existsByCollectionAndMapCode(collection, mapCode))
             throw new IllegalArgumentException("Map already exists in the collection");
 
         return collectionMapRepository.save(new CollectionMap(mapCode, collection));
     }
 
     public List<CollectionMap> getMapsByCollectionIdAndUserId(Long collectionId, Long userId) {
-        userService.getUserById(userId);
-        if (!collectionsRepository.existsByIdAndUserId(collectionId, userId))
-            throw new EntityNotFoundException("Collection", collectionId);
-
-        return collectionMapRepository.findByCollectionId(collectionId);
+        Collection collection = getCollectionByIdAndUserId(collectionId, userId);
+        return collectionMapRepository.findCollectionMapsByCollection(collection);
     }
 
     @Transactional
     public void removeMapFromCollection(Long collectionId, Long userId, String mapCode) {
-        if (!collectionsRepository.existsByIdAndUserId(collectionId, userId))
-            throw new EntityNotFoundException("Collection", collectionId);
-
-        if (!collectionMapRepository.existsByCollectionIdAndMapCode(collectionId, mapCode))
-            throw new EntityNotFoundException("Map", mapCode);
+        Collection collection = getCollectionByIdAndUserId(collectionId, userId);
+        if (!collectionMapRepository.existsByCollectionAndMapCode(collection, mapCode))
+            throw new EntityNotFoundException("Map", "map code", mapCode);
 
         collectionMapRepository.deleteByCollectionIdAndMapCode(collectionId, mapCode);
     }
