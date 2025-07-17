@@ -12,4 +12,8 @@ public class EntityNotFoundException extends RuntimeException {
     public EntityNotFoundException(String entityType, String field, String value) {
         super(entityType + " not found with " + field + ": " + value);
     }
+
+    public EntityNotFoundException(String entityType, String field, Long value) {
+        super(entityType + " not found with " + field + ": " + value);
+    }
 }

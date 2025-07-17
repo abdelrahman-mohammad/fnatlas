@@ -1,6 +1,8 @@
 package com.fnatlas.api.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,8 @@ public class CollectionMap {
     private Long id;
 
     @Column(name = "map_code", nullable = false)
+    @NotBlank(message = "Map code cannot be blank")
+    @Pattern(regexp = "^[0-9]{4}-[0-9]{4}-[0-9]{4}$", message = "Map code must be in format XXXX-XXXX-XXXX")
     private String mapCode;
 
     @ManyToOne
