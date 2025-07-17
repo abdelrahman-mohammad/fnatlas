@@ -24,11 +24,11 @@ public class CollectionsService {
     public Collection createCollection(CollectionRequest collectionRequest, Long userId) {
         User user = userService.getUserById(userId);
 
-        Collection collection = new Collection(
-                collectionRequest.getName(),
-                collectionRequest.getDescription(),
-                user
-        );
+        Collection collection = Collection.builder()
+                .name(collectionRequest.getName())
+                .description(collectionRequest.getDescription())
+                .user(user)
+                .build();
 
         return collectionsRepository.save(collection);
     }
@@ -64,7 +64,8 @@ public class CollectionsService {
         if(collectionMapRepository.existsByCollectionAndMapCode(collection, mapCode))
             throw new IllegalArgumentException("Map already exists in the collection");
 
-        return collectionMapRepository.save(new CollectionMap(mapCode, collection));
+        CollectionMap newCollectionMap = CollectionMap.builder().mapCode(mapCode).collection(collection).build();
+        return collectionMapRepository.save(newCollectionMap);
     }
 
     public List<CollectionMap> getMapsByCollectionIdAndUserId(Long collectionId, Long userId) {

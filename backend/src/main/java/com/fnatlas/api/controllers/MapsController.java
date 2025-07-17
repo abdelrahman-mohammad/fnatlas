@@ -1,6 +1,8 @@
 package com.fnatlas.api.controllers;
 
+import com.fnatlas.api.dtos.MapResponse;
 import com.fnatlas.api.entities.Review;
+import com.fnatlas.api.services.FortniteApiService;
 import com.fnatlas.api.services.ReviewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,14 +18,15 @@ import java.util.List;
 public class MapsController {
 
     private final ReviewsService reviewsService;
+    private final FortniteApiService fortniteApiService;
 
-    @GetMapping("/{mapCode}/reviews")
-    public List<Review> getReviewsByMapCode(@PathVariable String mapCode) {
-        return reviewsService.getReviewsByMapCode(mapCode);
+    @GetMapping("/{mapCode}")
+    public MapResponse getMapData(@PathVariable String mapCode) {
+        return fortniteApiService.getMapByCode(mapCode);
     }
 
-    @GetMapping("/{mapCode}/reviews/{reviewId}")
-    public Review getMapReview(@PathVariable String mapCode, @PathVariable Long reviewId) {
-        return reviewsService.getReviewByIdAndMapCode(reviewId, mapCode);
+    @GetMapping("/{mapCode}/reviews")
+    public List<Review> getMapReviews(@PathVariable String mapCode) {
+        return reviewsService.getReviewsByMapCode(mapCode);
     }
 }

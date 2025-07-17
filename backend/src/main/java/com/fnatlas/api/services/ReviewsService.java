@@ -23,7 +23,13 @@ public class ReviewsService {
         if (reviewsRepository.existsByMapCodeAndUserId(reviewRequest.getMapCode(), userId))
             throw new IllegalArgumentException("User has already reviewed this map");
 
-        Review review = new Review(reviewRequest.getMapCode(), user, reviewRequest.getRating(), reviewRequest.getContent());
+        Review review = Review.builder()
+                .mapCode(reviewRequest.getMapCode())
+                .user(user)
+                .rating(reviewRequest.getRating())
+                .content(reviewRequest.getContent())
+                .build();
+
         return reviewsRepository.save(review);
     }
 

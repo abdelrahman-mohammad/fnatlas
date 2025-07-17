@@ -20,7 +20,7 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public UserSession createUserSession(User user) {
-        UserSession userSession = new UserSession(user);
+        UserSession userSession = UserSession.builder().user(user).build();
         return userSessionsRepository.save(userSession);
     }
 

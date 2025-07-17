@@ -4,6 +4,7 @@ package com.fnatlas.api.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserSession {
 
     @Id
@@ -29,7 +31,7 @@ public class UserSession {
 
     @Column(name = "token", unique = true, nullable = false)
     @NotNull(message = "Token cannot be null")
-    private String token;
+    private String token = UUID.randomUUID().toString();
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -37,9 +39,4 @@ public class UserSession {
 
     @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt = LocalDateTime.now().plusDays(1);
-
-    public UserSession(User user) {
-        this.user = user;
-        this.token = UUID.randomUUID().toString();
-    }
 }

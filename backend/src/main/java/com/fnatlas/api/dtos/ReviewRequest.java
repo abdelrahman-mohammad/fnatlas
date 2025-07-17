@@ -2,12 +2,14 @@ package com.fnatlas.api.dtos;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ReviewRequest {
 
     @NotBlank(message = "Map code cannot be blank")

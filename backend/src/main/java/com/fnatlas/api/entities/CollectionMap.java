@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Table(name = "collection_maps")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CollectionMap {
 
     @Id
@@ -34,10 +36,4 @@ public class CollectionMap {
     @CreationTimestamp
     @Column(name = "added_at", nullable = false)
     private LocalDateTime addedAt;
-
-    public CollectionMap(String mapCode, Collection collection) {
-        this.mapCode = mapCode;
-        this.collection = collection;
-    }
-
 }
