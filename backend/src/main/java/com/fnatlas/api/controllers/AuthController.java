@@ -2,7 +2,6 @@ package com.fnatlas.api.controllers;
 
 import com.fnatlas.api.dtos.auth.LoginRequest;
 import com.fnatlas.api.dtos.auth.LoginResponse;
-import com.fnatlas.api.dtos.auth.LogoutRequest;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.services.AuthService;
 import jakarta.validation.Valid;
@@ -24,8 +23,8 @@ public class AuthController {
 
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(@RequestBody @Valid LogoutRequest token) {
-        authService.logout(token.getToken());
+    public void logout(@RequestHeader("Authorization") String token) {
+        authService.logout(token);
     }
 
     @GetMapping("/me")
