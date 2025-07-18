@@ -1,5 +1,6 @@
 package com.fnatlas.api.services;
 
+import com.fnatlas.api.dtos.LoginRequest;
 import com.fnatlas.api.dtos.LoginResponse;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.entities.UserSession;
@@ -19,18 +20,15 @@ public class AuthService {
     private final UserSessionsRepository userSessionsRepository;
     private final UserRepository userRepository;
 
-    public UserSession createUserSession(User user) {
+    public LoginResponse login(LoginRequest loginRequest) {
+        User user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User", "username", loginRequest.getUsername()));
+
+        if (!user.getPassword().equals(loginRequest.getPassword())) throw new AuthenticationFailedException();
+
         UserSession userSession = UserSession.builder().user(user).build();
-        return userSessionsRepository.save(userSession);
-    }
+        userSessionsRepository.save(userSession);
 
-    public LoginResponse login(String username, String password) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User", "username", username));
-
-        if (!user.getPassword().equals(password)) throw new AuthenticationFailedException();
-
-        UserSession userSession = createUserSession(user);
         return new LoginResponse(userSession.getToken(), user);
     }
 

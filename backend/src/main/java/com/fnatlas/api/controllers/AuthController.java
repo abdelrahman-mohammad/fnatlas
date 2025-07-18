@@ -19,7 +19,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody @Valid LoginRequest loginRequest) {
-        return authService.login(loginRequest.getUsername(), loginRequest.getPassword());
+        return authService.login(loginRequest);
     }
 
     @PostMapping("/logout")

@@ -35,15 +35,18 @@ public class UserSession {
     @Column(name = "token", unique = true, nullable = false)
     @NotBlank(message = "Token cannot be blank")
     @Size(max = 255, message = "Token cannot exceed 255 characters")
+    @Builder.Default
     private String token = UUID.randomUUID().toString();
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     @NotNull(message = "Created date cannot be null")
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "expires_at", nullable = false)
     @NotNull(message = "Expiration date cannot be null")
     @Future(message = "Expiration date must be in the future")
+    @Builder.Default
     private LocalDateTime expiresAt = LocalDateTime.now().plusDays(1);
 }
