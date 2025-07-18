@@ -2,6 +2,8 @@
 
 A full-stack personal analytics workspace for Fortnite Creative map creators and players to track, organize, and review maps using Epic Games' Fortnite Data API.
 
+Note: This README was AI-generated.
+
 ## 🎯 Project Overview
 
 FNAtlas bridges the gap between Epic's raw Fortnite Data API and community-driven insights. While Epic provides basic metrics, FNAtlas enables users to create personal map collections, write reviews, and build a curated discovery experience beyond Epic's algorithm.
