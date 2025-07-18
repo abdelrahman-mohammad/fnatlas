@@ -256,7 +256,7 @@ export FN_API_BASE_URL=https://fortnite-api.com
 
 # Run application
 ./mvnw spring-boot:run
-```
+``` 
 
 ### API Documentation
 Once running, visit:
