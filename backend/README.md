@@ -83,8 +83,8 @@ backend/src/main/java/com/fnatlas/api/
 #### Map Metrics Parameters
 - **interval**: `hour`, `day`, `minute`
 - **metrics** (query param): Array of metric types to include
-- **from** (query param): Start date for metrics
-- **to** (query param): End date for metrics
+- **from** (query param): Start date for metrics. Example: 2025-07-17T00:00:00.000Z
+- **to** (query param): End date for metrics. Example: 2025-07-18T00:00:00.000Z
 
 ## Testing the Application
 
