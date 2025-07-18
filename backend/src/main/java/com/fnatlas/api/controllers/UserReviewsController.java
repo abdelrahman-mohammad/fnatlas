@@ -2,6 +2,7 @@ package com.fnatlas.api.controllers;
 
 import com.fnatlas.api.dtos.ReviewRequest;
 import com.fnatlas.api.entities.Review;
+import com.fnatlas.api.services.AuthService;
 import com.fnatlas.api.services.ReviewsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,30 +17,36 @@ import java.util.List;
 public class UserReviewsController {
 
     private final ReviewsService reviewsService;
+    private final AuthService authService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Review createReview(@PathVariable Long userId, @RequestBody @Valid ReviewRequest reviewRequest) {
+    public Review createReview(@PathVariable Long userId, @RequestBody @Valid ReviewRequest reviewRequest, @RequestHeader(value = "Authorization") String token) {
+        authService.verifyAuthorization(userId, token);
         return reviewsService.createReview(reviewRequest, userId);
     }
 
     @GetMapping
-    public List<Review> getUserReviews(@PathVariable Long userId) {
+    public List<Review> getUserReviews(@PathVariable Long userId, @RequestHeader(value = "Authorization") String token) {
+        authService.verifyAuthorization(userId, token);
         return reviewsService.getReviewsByUserId(userId);
     }
 
     @GetMapping("/{reviewId}")
-    public Review getReview(@PathVariable Long userId, @PathVariable Long reviewId) {
+    public Review getReview(@PathVariable Long userId, @PathVariable Long reviewId, @RequestHeader(value = "Authorization") String token) {
+        authService.verifyAuthorization(userId, token);
         return reviewsService.getReviewByIdAndUserId(reviewId, userId);
     }
 
     @PutMapping("/{reviewId}")
-    public Review updateReview(@PathVariable Long userId, @PathVariable Long reviewId, @RequestBody @Valid ReviewRequest reviewUpdatesRequest) {
+    public Review updateReview(@PathVariable Long userId, @PathVariable Long reviewId, @RequestBody @Valid ReviewRequest reviewUpdatesRequest, @RequestHeader(value = "Authorization") String token) {
+        authService.verifyAuthorization(userId, token);
         return reviewsService.updateReview(reviewId, userId, reviewUpdatesRequest);
     }
 
     @DeleteMapping("/{reviewId}")
-    public void deleteReview(@PathVariable Long userId, @PathVariable Long reviewId) {
+    public void deleteReview(@PathVariable Long userId, @PathVariable Long reviewId, @RequestHeader(value = "Authorization") String token) {
+        authService.verifyAuthorization(userId, token);
         reviewsService.deleteReview(reviewId, userId);
     }
 }

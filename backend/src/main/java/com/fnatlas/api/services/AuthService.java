@@ -53,4 +53,10 @@ public class AuthService {
                 .orElseThrow(() -> new EntityNotFoundException("User", userSession.getUser().getId()));
     }
 
+    public void verifyAuthorization(Long requestedUserId, String token) {
+        User currentUser = getCurrentUser(token);
+        if (!currentUser.getId().equals(requestedUserId)) {
+            throw new AuthenticationFailedException("Unauthorized access to user ID: " + requestedUserId);
+        }
+    }
 }
