@@ -1,6 +1,7 @@
 package com.fnatlas.api.services;
 
-import com.fnatlas.api.dtos.UserRequest;
+import com.fnatlas.api.dtos.user.UserCreateRequest;
+import com.fnatlas.api.dtos.user.UserUpdateRequest;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.exceptions.EntityNotFoundException;
 import com.fnatlas.api.repositories.UserRepository;
@@ -15,17 +16,17 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User createUser(UserRequest userRequest) {
-        if (userRepository.existsByUsername(userRequest.getUsername()))
+    public User createUser(UserCreateRequest userCreateRequest) {
+        if (userRepository.existsByUsername(userCreateRequest.getUsername()))
             throw new IllegalArgumentException("Username already exists");
 
-        if (userRepository.existsByEmail(userRequest.getEmail()))
+        if (userRepository.existsByEmail(userCreateRequest.getEmail()))
             throw new IllegalArgumentException("Email already exists");
 
         User user = User.builder()
-                .username(userRequest.getUsername())
-                .email(userRequest.getEmail())
-                .password(userRequest.getPassword())
+                .username(userCreateRequest.getUsername())
+                .email(userCreateRequest.getEmail())
+                .password(userCreateRequest.getPassword())
                 .build();
 
         return userRepository.save(user);
@@ -39,12 +40,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User updateUser(Long id, UserRequest userUpdates) {
+    public User updateUser(Long id, UserUpdateRequest userUpdates) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User", id));
 
         if (userUpdates.getUsername() != null) user.setUsername(userUpdates.getUsername());
         if (userUpdates.getEmail() != null) user.setEmail(userUpdates.getEmail());
-        if (userUpdates.getPassword() != null) user.setPassword(userUpdates.getPassword());
 
         return userRepository.save(user);
     }

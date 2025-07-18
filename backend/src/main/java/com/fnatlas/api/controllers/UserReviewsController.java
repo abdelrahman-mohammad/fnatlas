@@ -1,8 +1,11 @@
 package com.fnatlas.api.controllers;
 
-import com.fnatlas.api.dtos.ReviewRequest;
+import com.fnatlas.api.dtos.review.ReviewCreateRequest;
+import com.fnatlas.api.dtos.review.ReviewUpdateRequest;
 import com.fnatlas.api.entities.Review;
+import com.fnatlas.api.exceptions.EntityNotFoundException;
 import com.fnatlas.api.services.AuthService;
+import com.fnatlas.api.services.FortniteApiService;
 import com.fnatlas.api.services.ReviewsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +21,15 @@ public class UserReviewsController {
 
     private final ReviewsService reviewsService;
     private final AuthService authService;
+    private final FortniteApiService fortniteApiService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Review createReview(@PathVariable Long userId, @RequestBody @Valid ReviewRequest reviewRequest, @RequestHeader(value = "Authorization") String token) {
+    public Review createReview(@PathVariable Long userId, @RequestBody @Valid ReviewCreateRequest request, @RequestHeader(value = "Authorization") String token) {
         authService.verifyAuthorization(userId, token);
-        return reviewsService.createReview(reviewRequest, userId);
+        if(!fortniteApiService.mapExists(request.getMapCode()))
+            throw new EntityNotFoundException("Fortnite Map", "map code", request.getMapCode());
+        return reviewsService.createReview(request, userId);
     }
 
     @GetMapping
@@ -39,9 +45,9 @@ public class UserReviewsController {
     }
 
     @PutMapping("/{reviewId}")
-    public Review updateReview(@PathVariable Long userId, @PathVariable Long reviewId, @RequestBody @Valid ReviewRequest reviewUpdatesRequest, @RequestHeader(value = "Authorization") String token) {
+    public Review updateReview(@PathVariable Long userId, @PathVariable Long reviewId, @RequestBody @Valid ReviewUpdateRequest request, @RequestHeader(value = "Authorization") String token) {
         authService.verifyAuthorization(userId, token);
-        return reviewsService.updateReview(reviewId, userId, reviewUpdatesRequest);
+        return reviewsService.updateReview(reviewId, userId, request);
     }
 
     @DeleteMapping("/{reviewId}")

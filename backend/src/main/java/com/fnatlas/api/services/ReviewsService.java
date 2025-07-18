@@ -1,6 +1,7 @@
 package com.fnatlas.api.services;
 
-import com.fnatlas.api.dtos.ReviewRequest;
+import com.fnatlas.api.dtos.review.ReviewCreateRequest;
+import com.fnatlas.api.dtos.review.ReviewUpdateRequest;
 import com.fnatlas.api.entities.Review;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.exceptions.EntityNotFoundException;
@@ -17,17 +18,17 @@ public class ReviewsService {
     private final ReviewsRepository reviewsRepository;
     private final UserService userService;
 
-    public Review createReview(ReviewRequest reviewRequest, Long userId) {
+    public Review createReview(ReviewCreateRequest reviewCreateRequest, Long userId) {
         User user = userService.getUserById(userId);
 
-        if (reviewsRepository.existsByMapCodeAndUserId(reviewRequest.getMapCode(), userId))
+        if (reviewsRepository.existsByMapCodeAndUserId(reviewCreateRequest.getMapCode(), userId))
             throw new IllegalArgumentException("User has already reviewed this map");
 
         Review review = Review.builder()
-                .mapCode(reviewRequest.getMapCode())
+                .mapCode(reviewCreateRequest.getMapCode())
                 .user(user)
-                .rating(reviewRequest.getRating())
-                .content(reviewRequest.getContent())
+                .rating(reviewCreateRequest.getRating())
+                .content(reviewCreateRequest.getContent())
                 .build();
 
         return reviewsRepository.save(review);
@@ -44,7 +45,7 @@ public class ReviewsService {
                 .orElseThrow(() -> new EntityNotFoundException("Review", reviewId));
     }
 
-    public Review updateReview(Long reviewId, Long userId, ReviewRequest reviewUpdatesRequest) {
+    public Review updateReview(Long reviewId, Long userId, ReviewUpdateRequest reviewUpdatesRequest) {
         Review existingReview = getReviewByIdAndUserId(reviewId, userId);
 
         if (reviewUpdatesRequest.getRating() != 0) existingReview.setRating(reviewUpdatesRequest.getRating());
@@ -63,13 +64,5 @@ public class ReviewsService {
     public List<Review> getReviewsByMapCode(String mapCode) {
         return reviewsRepository.findReviewsByMapCode(mapCode);
     }
-
-    public Review getReviewByIdAndMapCode(Long reviewId, String mapCode) {
-        // TODO: Validate mapCode - blank until map controller is implemented
-        return reviewsRepository.findReviewByIdAndMapCode(reviewId, mapCode)
-                .orElseThrow(() -> new EntityNotFoundException("Review", reviewId));
-    }
-
-
 
 }

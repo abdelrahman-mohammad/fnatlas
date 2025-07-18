@@ -1,7 +1,8 @@
 package com.fnatlas.api.controllers;
 
-import com.fnatlas.api.dtos.CollectionMapRequest;
-import com.fnatlas.api.dtos.CollectionRequest;
+import com.fnatlas.api.dtos.collection.CollectionCreateRequest;
+import com.fnatlas.api.dtos.collection.CollectionMapRequest;
+import com.fnatlas.api.dtos.collection.CollectionUpdateRequest;
 import com.fnatlas.api.entities.Collection;
 import com.fnatlas.api.entities.CollectionMap;
 import com.fnatlas.api.services.AuthService;
@@ -23,9 +24,9 @@ public class CollectionsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Collection createCollection(@PathVariable Long userId, @RequestBody @Valid CollectionRequest collectionRequest, @RequestHeader(value = "Authorization") String token) {
+    public Collection createCollection(@PathVariable Long userId, @RequestBody @Valid CollectionCreateRequest request, @RequestHeader(value = "Authorization") String token) {
         authService.verifyAuthorization(userId, token);
-        return collectionsService.createCollection(collectionRequest, userId);
+        return collectionsService.createCollection(request, userId);
     }
 
     @GetMapping
@@ -41,9 +42,9 @@ public class CollectionsController {
     }
 
     @PutMapping("/{collectionId}")
-    public Collection updateCollection(@PathVariable Long userId, @PathVariable Long collectionId, @RequestBody @Valid CollectionRequest collectionRequest, @RequestHeader(value = "Authorization") String token) {
+    public Collection updateCollection(@PathVariable Long userId, @PathVariable Long collectionId, @RequestBody @Valid CollectionUpdateRequest request, @RequestHeader(value = "Authorization") String token) {
         authService.verifyAuthorization(userId, token);
-        return collectionsService.updateCollection(collectionId, userId, collectionRequest);
+        return collectionsService.updateCollection(collectionId, userId, request);
     }
 
     @DeleteMapping("/{collectionId}")
@@ -57,9 +58,9 @@ public class CollectionsController {
 
     @PostMapping("/{collectionId}/maps")
     @ResponseStatus(HttpStatus.CREATED)
-    public CollectionMap addMapToCollection(@PathVariable Long userId, @PathVariable Long collectionId, @RequestBody @Valid CollectionMapRequest collectionMapRequest, @RequestHeader(value = "Authorization") String token) {
+    public CollectionMap addMapToCollection(@PathVariable Long userId, @PathVariable Long collectionId, @RequestBody @Valid CollectionMapRequest request, @RequestHeader(value = "Authorization") String token) {
         authService.verifyAuthorization(userId, token);
-        return collectionsService.addMapToCollection(collectionId, userId, collectionMapRequest.getMapCode());
+        return collectionsService.addMapToCollection(collectionId, userId, request.getMapCode());
     }
 
     @GetMapping("/{collectionId}/maps")

@@ -1,4 +1,4 @@
-package com.fnatlas.api.dtos;
+package com.fnatlas.api.dtos.auth;
 
 import com.fnatlas.api.entities.User;
 import jakarta.validation.Valid;

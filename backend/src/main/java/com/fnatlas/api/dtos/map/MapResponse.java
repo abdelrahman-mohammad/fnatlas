@@ -1,4 +1,4 @@
-package com.fnatlas.api.dtos;
+package com.fnatlas.api.dtos.map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,6 +1,7 @@
 package com.fnatlas.api.services;
 
-import com.fnatlas.api.dtos.CollectionRequest;
+import com.fnatlas.api.dtos.collection.CollectionCreateRequest;
+import com.fnatlas.api.dtos.collection.CollectionUpdateRequest;
 import com.fnatlas.api.entities.Collection;
 import com.fnatlas.api.entities.CollectionMap;
 import com.fnatlas.api.entities.User;
@@ -21,12 +22,12 @@ public class CollectionsService {
     private final CollectionMapRepository collectionMapRepository;
     private final UserService userService;
 
-    public Collection createCollection(CollectionRequest collectionRequest, Long userId) {
+    public Collection createCollection(CollectionCreateRequest collectionCreateRequest, Long userId) {
         User user = userService.getUserById(userId);
 
         Collection collection = Collection.builder()
-                .name(collectionRequest.getName())
-                .description(collectionRequest.getDescription())
+                .name(collectionCreateRequest.getName())
+                .description(collectionCreateRequest.getDescription())
                 .user(user)
                 .build();
 
@@ -44,7 +45,7 @@ public class CollectionsService {
                 .orElseThrow(() -> new EntityNotFoundException("Collection", collectionId));
     }
 
-    public Collection updateCollection(Long collectionId, Long userId, CollectionRequest collectionUpdates) {
+    public Collection updateCollection(Long collectionId, Long userId, CollectionUpdateRequest collectionUpdates) {
         Collection collection = getCollectionByIdAndUserId(collectionId, userId);
 
         if (collectionUpdates.getName() != null) collection.setName(collectionUpdates.getName());

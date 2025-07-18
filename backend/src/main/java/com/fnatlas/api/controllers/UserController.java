@@ -1,6 +1,7 @@
 package com.fnatlas.api.controllers;
 
-import com.fnatlas.api.dtos.UserRequest;
+import com.fnatlas.api.dtos.user.UserCreateRequest;
+import com.fnatlas.api.dtos.user.UserUpdateRequest;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.services.AuthService;
 import com.fnatlas.api.services.UserService;
@@ -21,8 +22,8 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody @Valid UserRequest userRequest) {
-        return userService.createUser(userRequest);
+    public User createUser(@RequestBody @Valid UserCreateRequest request) {
+        return userService.createUser(request);
     }
 
     @GetMapping("/{id}")
@@ -38,9 +39,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest userRequest, @RequestHeader(value = "Authorization") String token) {
+    public User updateUser(@PathVariable Long id, @RequestBody @Valid UserUpdateRequest request, @RequestHeader(value = "Authorization") String token) {
         authService.verifyAuthorization(id, token);
-        return userService.updateUser(id, userRequest);
+        return userService.updateUser(id, request);
     }
 
     @DeleteMapping("/{id}")

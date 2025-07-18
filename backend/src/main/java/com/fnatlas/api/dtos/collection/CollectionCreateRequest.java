@@ -1,4 +1,4 @@
-package com.fnatlas.api.dtos;
+package com.fnatlas.api.dtos.collection;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CollectionRequest {
+public class CollectionCreateRequest {
 
     @NotBlank(message = "Collection name cannot be blank")
     @Size(max = 100, message = "Collection name cannot exceed 100 characters")

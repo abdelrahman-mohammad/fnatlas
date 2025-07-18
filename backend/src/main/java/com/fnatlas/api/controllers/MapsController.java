@@ -1,7 +1,7 @@
 package com.fnatlas.api.controllers;
 
-import com.fnatlas.api.dtos.MapMetricsResponse;
-import com.fnatlas.api.dtos.MapResponse;
+import com.fnatlas.api.dtos.map.MapMetricsResponse;
+import com.fnatlas.api.dtos.map.MapResponse;
 import com.fnatlas.api.entities.Review;
 import com.fnatlas.api.services.FortniteApiService;
 import com.fnatlas.api.services.ReviewsService;

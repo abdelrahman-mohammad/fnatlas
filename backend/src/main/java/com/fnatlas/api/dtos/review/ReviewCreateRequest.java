@@ -1,4 +1,4 @@
-package com.fnatlas.api.dtos;
+package com.fnatlas.api.dtos.review;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReviewRequest {
+public class ReviewCreateRequest {
 
     @NotBlank(message = "Map code cannot be blank")
     @Pattern(regexp = "^[0-9]{4}-[0-9]{4}-[0-9]{4}$", message = "Map code must be in format XXXX-XXXX-XXXX")

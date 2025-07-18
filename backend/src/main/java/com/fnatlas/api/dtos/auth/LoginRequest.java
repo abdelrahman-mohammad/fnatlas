@@ -1,4 +1,4 @@
-package com.fnatlas.api.dtos;
+package com.fnatlas.api.dtos.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

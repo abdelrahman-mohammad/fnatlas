@@ -1,7 +1,7 @@
 package com.fnatlas.api.services;
 
-import com.fnatlas.api.dtos.MapMetricsResponse;
-import com.fnatlas.api.dtos.MapResponse;
+import com.fnatlas.api.dtos.map.MapMetricsResponse;
+import com.fnatlas.api.dtos.map.MapResponse;
 import com.fnatlas.api.exceptions.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -63,6 +63,23 @@ public class FortniteApiService {
                 throw new EntityNotFoundException("Fortnite Map", "map code", mapCode);
             else
                 throw new RuntimeException("Error fetching map metrics: " + e.getMessage(), e);
+        }
+    }
+
+    public boolean mapExists(String mapCode) {
+        if(!isValidMapCode(mapCode)) return false;
+
+        try {
+            fortniteWebClient
+                    .get()
+                    .uri("/islands/{mapCode}", mapCode)
+                    .retrieve()
+                    .bodyToMono(MapResponse.class)
+                    .block();
+            return true;
+        } catch (WebClientResponseException e) {
+            if(e.getStatusCode() == HttpStatus.NOT_FOUND) return false;
+            throw new RuntimeException("Error checking map existence: " + e.getMessage(), e);
         }
     }
 

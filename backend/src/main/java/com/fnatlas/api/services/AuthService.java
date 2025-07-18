@@ -1,7 +1,7 @@
 package com.fnatlas.api.services;
 
-import com.fnatlas.api.dtos.LoginRequest;
-import com.fnatlas.api.dtos.LoginResponse;
+import com.fnatlas.api.dtos.auth.LoginRequest;
+import com.fnatlas.api.dtos.auth.LoginResponse;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.entities.UserSession;
 import com.fnatlas.api.exceptions.AuthenticationFailedException;
@@ -42,11 +42,11 @@ public class AuthService {
 
     public User getCurrentUser(String token) {
         UserSession userSession = userSessionsRepository.findByToken(token)
-                .orElseThrow(() -> new AuthenticationFailedException("Invalid token"));
+                .orElseThrow(() -> new AuthenticationFailedException("You must be logged in to access this resource"));
 
         if(userSession.getExpiresAt().isBefore(LocalDateTime.now())) {
             userSessionsRepository.delete(userSession);
-            throw new AuthenticationFailedException("Session expired");
+            throw new AuthenticationFailedException("Session expired. Please log in again.");
         }
 
         return userRepository.findById(userSession.getUser().getId())
@@ -56,7 +56,7 @@ public class AuthService {
     public void verifyAuthorization(Long requestedUserId, String token) {
         User currentUser = getCurrentUser(token);
         if (!currentUser.getId().equals(requestedUserId)) {
-            throw new AuthenticationFailedException("Unauthorized access to user ID: " + requestedUserId);
+            throw new AuthenticationFailedException("User with ID: " + requestedUserId);
         }
     }
 }
