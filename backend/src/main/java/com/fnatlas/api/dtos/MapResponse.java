@@ -23,5 +23,5 @@ public class MapResponse {
     private String category;
     private String createdIn;
     private List<String> tags;
-    private boolean exists = false;
+    private boolean exists = true;
 }
