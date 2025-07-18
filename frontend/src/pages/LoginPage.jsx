@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, Form, Input, Button, Tabs, message } from "antd";
 import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
 import { authAPI, userAPI } from "../services/api";
@@ -7,6 +8,26 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [loginFormU] = Form.useForm();
   const [registerFormU] = Form.useForm();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    checkLoggedIn();
+  }, []);
+
+  const checkLoggedIn = async () => {
+    const token = localStorage.getItem("auth_token");
+    if (!token) return;
+
+    try {
+      await authAPI.getCurrentUser();
+      console.log("User is already logged in, redirecting to profile page.");
+      navigate("/profile");
+    } catch (error) {
+      console.error("Error checking logged in status:", error);
+      localStorage.removeItem("auth_token");
+      message.error("Session expired, please log in again.");
+    }
+  };
 
   const handleLogin = async (values) => {
     setLoading(true);
@@ -14,7 +35,8 @@ function LoginPage() {
       const response = await authAPI.login(values);
       message.success("Login successful!");
       console.log("Logged in:", response);
-      // TODO: Redirect to the profile page (I don't think i'll have time to do it)
+      navigate("/profile");
+      loginFormU.resetFields();
     } catch (error) {
       message.error("Login failed. Please check your credentials.");
       console.error("Login error:", error);
