@@ -2,6 +2,7 @@ package com.fnatlas.api.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,7 @@ public class CollectionMap {
 
     @ManyToOne
     @JoinColumn(name = "collection_id", nullable = false)
+    @NotNull(message = "Collection cannot be null")
     private Collection collection;
 
     @CreationTimestamp

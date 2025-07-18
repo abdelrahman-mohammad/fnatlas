@@ -41,6 +41,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @NotNull(message = "User cannot be null")
     private User user;
 
     @CreationTimestamp

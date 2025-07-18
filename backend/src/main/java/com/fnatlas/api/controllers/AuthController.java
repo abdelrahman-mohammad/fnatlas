@@ -5,6 +5,7 @@ import com.fnatlas.api.dtos.LoginResponse;
 import com.fnatlas.api.dtos.LogoutRequest;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.services.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
+    public LoginResponse login(@RequestBody @Valid LoginRequest loginRequest) {
         return authService.login(loginRequest.getUsername(), loginRequest.getPassword());
     }
 
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(@RequestBody LogoutRequest token) {
+    public void logout(@RequestBody @Valid LogoutRequest token) {
         authService.logout(token.getToken());
     }
 

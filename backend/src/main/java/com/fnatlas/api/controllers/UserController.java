@@ -1,7 +1,9 @@
 package com.fnatlas.api.controllers;
 
+import com.fnatlas.api.dtos.UserRequest;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +19,8 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public User createUser(@RequestBody @Valid UserRequest userRequest) {
+        return userService.createUser(userRequest);
     }
 
     @GetMapping("/{id}")
@@ -32,8 +34,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user);
+    public User updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest userRequest) {
+        return userService.updateUser(id, userRequest);
     }
 
     @DeleteMapping("/{id}")

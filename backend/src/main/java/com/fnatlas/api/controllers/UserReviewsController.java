@@ -34,7 +34,7 @@ public class UserReviewsController {
     }
 
     @PutMapping("/{reviewId}")
-    public Review updateReview(@PathVariable Long userId, @PathVariable Long reviewId, @RequestBody ReviewRequest reviewUpdatesRequest) {
+    public Review updateReview(@PathVariable Long userId, @PathVariable Long reviewId, @RequestBody @Valid ReviewRequest reviewUpdatesRequest) {
         return reviewsService.updateReview(reviewId, userId, reviewUpdatesRequest);
     }
 

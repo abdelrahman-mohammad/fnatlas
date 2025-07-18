@@ -1,5 +1,6 @@
 package com.fnatlas.api.services;
 
+import com.fnatlas.api.dtos.UserRequest;
 import com.fnatlas.api.entities.User;
 import com.fnatlas.api.exceptions.EntityNotFoundException;
 import com.fnatlas.api.repositories.UserRepository;
@@ -14,12 +15,18 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User createUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername()))
+    public User createUser(UserRequest userRequest) {
+        if (userRepository.existsByUsername(userRequest.getUsername()))
             throw new IllegalArgumentException("Username already exists");
 
-        if (userRepository.existsByEmail(user.getEmail()))
+        if (userRepository.existsByEmail(userRequest.getEmail()))
             throw new IllegalArgumentException("Email already exists");
+
+        User user = User.builder()
+                .username(userRequest.getUsername())
+                .email(userRequest.getEmail())
+                .password(userRequest.getPassword())
+                .build();
 
         return userRepository.save(user);
     }
@@ -32,7 +39,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User updateUser(Long id, User userUpdates) {
+    public User updateUser(Long id, UserRequest userUpdates) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User", id));
 
         if (userUpdates.getUsername() != null) user.setUsername(userUpdates.getUsername());
