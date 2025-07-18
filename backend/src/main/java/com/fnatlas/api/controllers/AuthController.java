@@ -29,7 +29,6 @@ public class AuthController {
 
     @GetMapping("/me")
     public User getCurrentUser(@RequestHeader("Authorization") String token) {
-        System.out.println("Token: " + token);
         return authService.getCurrentUser(token);
     }
 }
