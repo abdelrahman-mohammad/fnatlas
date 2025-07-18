@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class FortniteConfig {
 
-    @Value("${FN_API_BASE_URL}")
+    @Value("${FN_API_BASE_URL:https://api.fortnite.com/ecosystem/v1}")
     private String baseUrl;
 
     @Bean
