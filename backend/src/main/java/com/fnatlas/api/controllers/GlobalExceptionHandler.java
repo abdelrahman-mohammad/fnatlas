@@ -5,6 +5,7 @@ import com.fnatlas.api.exceptions.EntityNotFoundException;
 import com.fnatlas.api.exceptions.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,6 +31,16 @@ public class GlobalExceptionHandler {
         StringBuilder message = new StringBuilder("Validation failed: ");
         ex.getConstraintViolations().forEach(violation ->
             message.append(violation.getPropertyPath()).append(" ").append(violation.getMessage()).append("; ")
+        );
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), message.toString());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        StringBuilder message = new StringBuilder("Validation failed: ");
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+            message.append(error.getField()).append(" ").append(error.getDefaultMessage()).append("; ")
         );
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), message.toString());
     }
