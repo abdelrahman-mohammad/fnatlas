@@ -266,7 +266,9 @@ Once running, visit:
 ## Testing
 
 ### Sample Data
-Use the provided curl examples to create test data, or import the Postman collection for comprehensive API testing.
+Postman collection: https://www.postman.com/abdelrahman-abdelaal/workspace/fn-atlas-workspace/collection/36850448-fc0e2df0-f536-4228-be1b-b479c3839974?action=share&creator=36850448&active-environment=36850448-d1d0ebd2-5bfa-4a7e-b5d1-87c840c03f84
+
+Use the provided the Postman collection above or the curl examples below to create test data, or import the Postman collection for comprehensive API testing.
 
 ### Database
 The application uses `spring.jpa.hibernate.ddl-auto=update` for automatic schema updates during development.
