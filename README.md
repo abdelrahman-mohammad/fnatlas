@@ -33,19 +33,19 @@ fnatlas/
 │   │       ├── services/       # Business logic
 │   │       ├── entities/       # Database entities
 │   │       ├── repositories/   # Data access layer
-│   │       └── exceptions/     # Custom exceptions
+│   │       ├── exceptions/     # Custom exceptions
+│   │       └── config/         # Configuration classes
 │   ├── src/main/resources/
 │   │   └── application.properties
 │   └── pom.xml
-├── frontend/                   # HTML/CSS/JavaScript (placeholder for now - structure will change)
-│   ├── index.html              # Main landing page
-│   ├── login.html              # Authentication
-│   ├── users.html              # User management
-│   ├── collections.html        # Map collections
-│   ├── reviews.html            # Review system
-│   ├── css/
-│   ├── js/
-│   └── assets/            
+├── frontend/                   # React application
+│   ├── src/
+│   │   ├── pages/             # React page components
+│   │   ├── services/          # API service layer
+│   │   ├── App.jsx            # Main app with routing
+│   │   └── main.jsx           # Entry point
+│   ├── package.json
+│   └── vite.config.js
 └── README.md
 ```
 
@@ -60,10 +60,31 @@ fnatlas/
 - **External API**: Epic Games Fortnite Data API
 
 ### Frontend
-- **Languages**: HTML5, CSS3, JavaScript (ES6+)
-- **Styling**: Bootstrap 5 (maybe)
-- **HTTP Client**: Fetch API
+- **Framework**: React 19.1.0
+- **Build Tool**: Vite
+- **UI Library**: Ant Design
+- **Routing**: React Router
+- **HTTP Client**: Axios
 - **Storage**: localStorage for session management
+
+## 🚀 Getting Started
+
+### Backend
+```bash
+cd backend
+./mvnw spring-boot:run
+```
+Runs on `http://localhost:8080`
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Runs on `http://localhost:5173`
+
+See individual README files in `/backend` and `/frontend` for detailed setup instructions.
 
 ## 📄 License
 
