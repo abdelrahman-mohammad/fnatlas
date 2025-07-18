@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users/{userId}/reviews")
-public class UserReviewsController {
+public class ReviewsController {
 
     private final ReviewsService reviewsService;
     private final AuthService authService;
